@@ -1,0 +1,23 @@
+import {makeRequest} from "./api-client.js";
+
+const getAllProducts = async () => {
+    return await makeRequest('GET', '/products', {}, {}, {}, false);
+};
+
+const addProduct = async (productData, requiresAuth) => {
+    return await makeRequest('POST', '/products', {}, productData, {}, requiresAuth);
+}
+
+const updateProduct = async (id, productData, requiresAuth) => {
+    return await makeRequest('PUT', `/products/${id}`, {}, productData, {}, requiresAuth)
+};
+
+const deleteProduct = async (id) => {
+    return await makeRequest('DELETE', `/products/${id}`, {}, {}, {}, true);
+};
+
+const getProductById = async (id) => {
+    return await makeRequest('GET', `/products/${id}`, {}, {}, {}, false);
+};
+
+export {getAllProducts, addProduct, updateProduct, deleteProduct, getProductById};

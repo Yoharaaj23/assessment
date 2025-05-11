@@ -1,0 +1,7 @@
+{
+  "message": "Validation failed",
+  "errors": {
+    "name": "Path `name` is required.",
+    "price": "Path `price` is required."
+  }
+}

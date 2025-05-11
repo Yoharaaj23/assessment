@@ -1,0 +1,7 @@
+{
+  "message": "Validation failed",
+  "errors": {
+    "name": "Path `name` is required.",
+    "productType": "`game` is not a valid enum value for path `productType`."
+  }
+}
