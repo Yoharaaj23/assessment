@@ -21,7 +21,7 @@ Feature: Stock Management - Handling product orders
     And the "buy" order response should be valid
 
   @e2e @stock @orders @buy @sell @positive
-  Scenario: Validate Stock Management - Buy & Sell orders
+  Scenario: Validate Stock Management - Buy & Sell orders - E2E
     Given a product exists in the inventory
       | name    | price  | productType        | quantity |
       | Monitor | 120.50 | computer accessory | 10       |

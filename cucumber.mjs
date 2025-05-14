@@ -5,9 +5,6 @@ export const config = {
         format: [
                 ['html:reports/cucumber-report.html'],
                 'summary'
-        ],
-        formatOptions: {
-                snippetInterface: 'async-await'
-        }
+        ]
 };
 export default config;

@@ -68,3 +68,19 @@ Feature: Product Management - Create Product
       | Halo | 15.10 | games       | 1        |
     Then the response status code should be 401
     And the response should contain a "message" field with value "No token, authorization denied"
+
+  @e2e @retrieve-product @update-product @delete-product
+  Scenario: Product Management - E2E
+    Given a product exists in the inventory
+      | name | price  | productType | quantity |
+      | Asus | 999.10 | laptops     | 1        |
+    When I send a request to update "stored-productId" product with the updated details
+      | name | price  | productType | quantity |
+      | Dell | 888.10 | laptops     | 2        |
+    Then the response status code should be 200
+    And successfully retrieved the created the product from the inventory
+    When I send a request to delete a product with "stored-productId"
+    Then the response status code should be 200
+    And the response should contain a "message" field with value "Product removed"
+    When I send a request to retrieve a product with "stored-productId"
+    Then the response status code should be 404

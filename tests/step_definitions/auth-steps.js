@@ -18,6 +18,8 @@ Given('I have a valid username and password', function() {
   password = process.env.TEST_PASSWORD;
 });
 
+Given('I logged into the inventory management with a valid user', loggedIn);
+
 When('I submit a login request', async function() {
   const response = await authService.forceLogin(username, password);
   scenarioContext.setData('response', response);
@@ -27,5 +29,3 @@ export async function loggedIn() {
   const response = await authService.authenticate(`${process.env.TEST_USERNAME}`, `${process.env.TEST_PASSWORD}`);
   scenarioContext.setData('response', response);
 }
-
-Given('I logged into the inventory management with a valid user', loggedIn);

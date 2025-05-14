@@ -39,11 +39,11 @@ export async function productRetrieved() {
   let createdAt = response.data['createdAt'];
   let productId = response.data['productId'];
 
-  console.log('Product ID: ' + productId);
   scenarioContext.setData('productId', productId);
 
+  console.log('Retrieving a product by id: ' + productId + '');
   let getProductByIdResponse = await getProductById(productId);
-  console.log(`Get a Product by its ID Response:  ${JSON.stringify(getProductByIdResponse.data)}`);
+  console.log(`Retrieved product response:  ${JSON.stringify(getProductByIdResponse.data)}`);
 
   expect(getProductByIdResponse.status).to.equal(200);
   expect(getProductByIdResponse.data['productId']).to.equal(productId);

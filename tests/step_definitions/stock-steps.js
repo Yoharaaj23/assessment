@@ -25,26 +25,31 @@ When('I send a request to create a new {string} order with the following payload
     scenarioContext.setData(`${orderType}OrderQuantity`, parseInt(row.quantity));
   }
 
-  console.log('Order Payload: ' + JSON.stringify(payload) + '');
   await storeCurrentStock(payload.productId);
   const response = await createOrder(payload, true);
   scenarioContext.setData('response', response);
 });
 
 When('I send a request to get current stock level for a product id {string}', async function(productId) {
-
   productId = getStoredValue(productId, scenarioContext);
-
-  console.log('productId: ' + productId);
+  console.log('Getting current stock for product id: ' + productId);
   const response = await getProductStock(productId);
   scenarioContext.setData('response', response);
 });
 
-Then('the {string} order response should be valid', function(orderType) {
+When('I send a request to create a new {string} order with the following payload without authentication', async function(orderType, dataTable) {
+  const response = await createOrder(dataTable, false);
+  scenarioContext.setData('response', response);
+});
 
+When('I send a request to get current stock level for a product id {string} without authentication', async function(productId) {
+  const response = await getProductStock(productId, false);
+  scenarioContext.setData('response', response);
+});
+
+Then('the {string} order response should be valid', function(orderType) {
   const response = scenarioContext.getData('response');
   const responseData = response.data;
-  console.log(responseData);
 
   assertOrderResponse(responseData, {
     productId: scenarioContext.getData('productId'),
@@ -52,13 +57,10 @@ Then('the {string} order response should be valid', function(orderType) {
     orderType: orderType,
     quantity: scenarioContext.getData(`${orderType}OrderQuantity`)
   });
-
-
 });
 
 Then('the {string} current stock level should reflect all {int} completed transactions', async function(productId, totalTransactions) {
   productId = getStoredValue(productId, scenarioContext);
-  console.log('productId: ' + productId);
   const response = await getProductStock(productId);
   const totalBuys = scenarioContext.getData('buyOrderQuantity');
   const totalSells = scenarioContext.getData('sellOrderQuantity');
@@ -69,13 +71,4 @@ Then('the {string} current stock level should reflect all {int} completed transa
   expect(response.data['totalSells']).to.equal(totalSells);
   expect(response.data['currentStock']).to.equal(totalBuys - totalSells);
   expect(response.data['totalTransactions']).to.equal(totalTransactions);
-});
-
-When('I send a request to create a new {string} order with the following payload without authentication', async function(orderType, dataTable) {
-  const response = await createOrder(dataTable, false);
-  scenarioContext.setData('response', response);
-});
-When('I send a request to get current stock level for a product id {string} without authentication', async function(productId) {
-  const response = await getProductStock(productId, false);
-  scenarioContext.setData('response', response);
 });

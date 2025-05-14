@@ -70,12 +70,3 @@ Feature: Shops Inventory Management System - Early Performance Tests
     When I send a request to get current stock level for a product id "stored-productId"
     Then the response status code should be 200
     And the response time should be less than 500 milliseconds with 100% threshold
-
-#     login?
-
-
-
-
-#  Clean up
-#Replacing values needed?
-#other clean ups

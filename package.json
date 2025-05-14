@@ -8,13 +8,13 @@
     "@cucumber/html-formatter": "^21.10.1",
     "axios": "^1.9.0",
     "chai": "^5.2.0",
+    "cross-env": "^7.0.3",
     "mocha": "^11.2.2",
     "prettier": "^3.3.1",
     "vite": "^6.3.5"
   },
   "scripts": {
-    "test": "NODE_OPTIONS=--experimental-vm-modules cucumber-js --config cucumber.mjs --format html:reports/cucumber-report.html --format summary",
-    "test:win": "set NODE_OPTIONS=--experimental-vm-modules&& cucumber-js --config cucumber.mjs --format html:reports/cucumber-report.html --format summary"
+    "test": "cross-env NODE_OPTIONS=--experimental-vm-modules npx cucumber-js --config cucumber.mjs --format html:reports/cucumber-report.html --format summary"
   },
   "main": "index.js",
   "dependencies": {

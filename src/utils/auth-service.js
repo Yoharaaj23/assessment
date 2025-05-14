@@ -41,7 +41,6 @@ export class AuthService {
     }
 
     const response = await login(username, password);
-    console.log('Login response:', response.data);
     this.setToken(response.data['token']);
     return response;
   }
