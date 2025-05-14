@@ -1,12 +1,15 @@
+@login
 Feature: User Authentication
 
+  @positive
   Scenario: Successful login
-    Given I have a username "user01" and password "secpassword*"
+    Given I have a valid username and password
     When I submit a login request
     Then the response status code should be 200
     And the response should contain a "token" field
     And the response should contain a "message" field with value "user01 logged in successful"
 
+  @negative
   Scenario Outline: Invalid login attempts
     Given I have a username "<username>" and password "<password>"
     When I submit a login request

@@ -1,7 +1,7 @@
-import {makeRequest} from "./api-client.js";
+import { makeRequest } from './api-client.js';
 
 const getStatus = async () => {
-    return await makeRequest('GET', '/status', {}, {}, {}, false);
+  return await makeRequest('GET', '/status', {}, {}, {}, false);
 };
 
-export {getStatus};
+export { getStatus };

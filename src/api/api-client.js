@@ -1,8 +1,8 @@
 import axios from 'axios';
 import dotenv from 'dotenv';
-import {scenarioContext} from "../utils/scenario-context.js";
-dotenv.config();
+import { scenarioContext } from '../utils/scenario-context.js';
 
+dotenv.config();
 
 /**
  * Makes HTTP requests to REST APIs
@@ -16,36 +16,38 @@ dotenv.config();
  */
 
 const makeRequest = async (method, endpoint, params = null, body = null, headers = {}, requiresAuth = false) => {
-    try {
-        const requestHeaders = {
-            'Content-Type': 'application/json',
-            ...headers
-        };
+  try {
+    const requestHeaders = {
+      'Content-Type': 'application/json',
+      ...headers
+    };
 
-        if (requiresAuth) {
-            const token = scenarioContext.getData('authToken'); // or however you store your token
-            if (!token) {
-                throw new Error('Authentication required but no token found');
-            }
-            requestHeaders['Authorization'] = `Bearer ${token}`
-        }
-
-        const url = `${process.env.API_BASE_URL}${endpoint}`;
-
-        return await axios({
-            method: method.toUpperCase(),
-            url,
-            params: params,
-            data: body,
-            headers: requestHeaders,
-        });
-    } catch (error) {
-        if(error.response)
-        {
-            return error.response;
-        }
-        throw error;
+    if (requiresAuth) {
+      const token = scenarioContext.getData('authToken'); // or however you store your token
+      if (!token) {
+        throw new Error('Authentication required but no token found');
+      }
+      requestHeaders['Authorization'] = `Bearer ${token}`;
     }
+
+    const url = `${process.env.API_BASE_URL}${endpoint}`;
+    const startTime = Date.now();
+    const response = await axios({
+      method: method.toUpperCase(),
+      url,
+      params: params,
+      data: body,
+      headers: requestHeaders
+    });
+    response.responseTime = Date.now() - startTime;
+    return response;
+
+  } catch (error) {
+    if (error.response) {
+      return error.response;
+    }
+    throw error;
+  }
 };
 
-export {makeRequest};
+export { makeRequest };

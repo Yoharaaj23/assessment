@@ -3,6 +3,7 @@ Feature: Product Management - Retrieve Product
   Background:
     Given the api and database status is valid
 
+  @retrieve-all-products @positive
   Scenario: List all products from the inventory
     When I send a request to get all products
     Then the response status code should be 200
@@ -15,7 +16,8 @@ Feature: Product Management - Retrieve Product
       | quantity    |
       | createdAt   |
 
-    Scenario: Retrieve a product - Unknown Product Id
-      When I send a request to retrieve a product with "id"
-      Then the response status code should be 404
-      And the response should contain a "message" field with value "Product not found"
+  @retrieve-product @negative
+  Scenario: Retrieve a product - Unknown Product Id
+    When I send a request to retrieve a product with "unknown-id"
+    Then the response status code should be 404
+    And the response should contain a "message" field with value "Product not found"

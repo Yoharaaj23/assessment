@@ -1,8 +1,10 @@
+@create-product
 Feature: Product Management - Create Product
 
   Background:
     Given the api and database status is valid
 
+  @positive @retrieve-product
   Scenario Outline: Successfully create a valid product - <name> - <productType>
     Given I logged into the inventory management with a valid user
     When I send a request to create a product with the following payload
@@ -26,6 +28,7 @@ Feature: Product Management - Create Product
       | Notebook | 3.00   | miscellaneous      | 100000   |
       | Pixel 7  | 250.00 | mobile             | 99       |
 
+  @negative
   Scenario Outline: Create a product - Invalid Value
     Given I logged into the inventory management with a valid user
     When I send a request to create a product with the following payload
@@ -35,16 +38,33 @@ Feature: Product Management - Create Product
     And the response should match the expected file "<fileName>"
 
     Examples:
-      | name   | price | productType   | quantity | fileName                 |
-      |        | 15.10 | game          | 1        | invalid_name_productType |
-      | Wonder | 0     | miscellaneous | 1        | invalid_price            |
-      |        |       | mobile        | 12       | invalid_name_price       |
+      | name   | price   | productType   | quantity | fileName                 |
+      |        | 105.101 | game          | 11       | invalid_name_productType |
+      | Wonder | 0       | miscellaneous | 1        | invalid_price            |
+      |        |         | laptops       | 1123432  | invalid_name_price       |
 
+  @negative
+  Scenario: Validate duplicate product creation
+    Given I logged into the inventory management with a valid user
+    When I send a request to create a product with the following payload
+      | name  | price | productType | quantity |
+      | Halo3 | 51.10 | games       | 11       |
+    Then the response status code should be 201
+    When I send a request to create a product with the following payload
+      | name               | price | productType | quantity |
+      | stored-productName | 51.10 | games       | 11       |
+    Then the response status code should be 400
+    And the response should contain the following fields
+      | message              |
+      | conflict.existingId  |
+      | conflict.name        |
+      | conflict.productType |
+    And the response should contain a "message" field with value "Product with this name and type already exists"
+
+  @negative
   Scenario: Create a product - No Authentication
     When I send a request to create a product with the following payload without authentication
       | name | price | productType | quantity |
       | Halo | 15.10 | games       | 1        |
     Then the response status code should be 401
     And the response should contain a "message" field with value "No token, authorization denied"
-
-#    todo - early perf tests
